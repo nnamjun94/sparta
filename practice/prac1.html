@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운동화판매</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</head>
+<style>
+    body {
+        font-family: 'Song Myung', serif;
+        ;
+    }
+
+    .title {
+        border: black;
+        font-size: 30px;
+    }
+
+    .wrap {
+        margin: 10px auto;
+        width: 500px;
+    }
+
+    img {
+        width: 300px;
+        display: block;
+        margin: 90px;
+    }
+
+    .order_box {
+        width: 100px;
+    }
+
+    .btn {
+        margin: auto;
+        width: 100%;
+    }
+
+    .color_exchange {
+        color: blue;
+    }
+</style>
+<script>
+    function order() {
+        let name = $('#myName').val();
+        let cnt = $('#myCnt').val();
+        let adress = $('#myAdress').val();
+        let phone = $('#myPhone').val();
+
+        if (name == '') {
+            alert('이름을 입력하시오');
+
+        } else if (cnt == '') {
+            alert('수량을 입력하시오')
+
+        } else if (adress == '') {
+            alert('주소를 입력하시오')
+
+        } else if (phone == '') {
+            alert('휴대폰 번호를 입력하시오')
+
+        } else if (true) {
+            alert('주문이 완료되었습니다')
+            return
+        }
+    }
+
+    $(document).ready(function () {
+        now_exchange();
+        // alert('완료');
+    });
+
+    function now_exchange() {
+        $.ajax({
+            type: "GET",
+            url: "https://api.manana.kr/exchange/rate.json",
+            data: {},
+            success: function (response) {
+                // console.log(response);
+                let value = response[1]['rate'];
+                // console.log(value);
+                $('#exchange').text(value)
+            }
+        });
+    }
+
+</script>
+
+<body>
+    <div class="wrap">
+        <div id="image">
+            <img src="https://cdn.pixabay.com/photo/2013/07/12/18/20/chucks-153310_1280.png" alt="">
+        </div>
+
+        <hr>
+        <div>
+            <span class="title">운동화</span> <span>가격 15,000원 / 개</span>
+            <div>
+                <p>세상에서 제일 멋진 신발입니다. </p>
+                <p> 이 신발만 있다면 하루종일 걸어도 발에 피로를 느낄 수 없으실 겁니다.</p>
+            </div>
+            <div class = "color_exchange">
+                달러-원 환율 :
+                <span id="exchange"></span>
+            </div>
+        </div>
+
+
+        <hr>
+        <div>
+            <p>
+                <span class="title">주문하기!</span>
+            </p>
+
+            <p class="order_menu">
+                주문자 성함 : <input id="myName" class="order_box" type="text">
+            </p>
+
+            <p>
+                <label for="cnt">수량 : </label>
+                <select class="order_box name" id="myCnt">
+                    <option value="">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </p>
+
+            <p class="order_menu">
+                주소 : <input id="myAdress" class="order_box" type="text">
+            </p>
+
+            <p class="order_menu">
+                전화번호 : <input id="myPhone" class="order_box" type="text">
+            </p>
+            <hr>
+
+            <div class="btn">
+                <button onclick="order()">주문하기</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
