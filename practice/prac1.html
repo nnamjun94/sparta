@@ -1,158 +1,217 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>운동화판매</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+    <title>원페이지 쇼핑몰gg</title>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    </script>
+
+    <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-</head>
-<style>
-    body {
-        font-family: 'Song Myung', serif;
-        ;
-    }
-
-    .title {
-        border: black;
-        font-size: 30px;
-    }
-
-    .wrap {
-        margin: 10px auto;
-        width: 500px;
-    }
-
-    img {
-        width: 300px;
-        display: block;
-        margin: 90px;
-    }
-
-    .order_box {
-        width: 100px;
-    }
-
-    .btn {
-        margin: auto;
-        width: 100%;
-    }
-
-    .color_exchange {
-        color: blue;
-    }
-</style>
-<script>
-    function order() {
-        let name = $('#myName').val();
-        let cnt = $('#myCnt').val();
-        let adress = $('#myAdress').val();
-        let phone = $('#myPhone').val();
-
-        if (name == '') {
-            alert('이름을 입력하시오');
-
-        } else if (cnt == '') {
-            alert('수량을 입력하시오')
-
-        } else if (adress == '') {
-            alert('주소를 입력하시오')
-
-        } else if (phone == '') {
-            alert('휴대폰 번호를 입력하시오')
-
-        } else if (true) {
-            alert('주문이 완료되었습니다')
-            return
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='index.js')}}"></script>
+    <!--  css -->
+    <style type="text/css">
+        * {
+            font-family: 'Single Day', cursive;
         }
-    }
 
-    $(document).ready(function () {
-        now_exchange();
-        // alert('완료');
-    });
+        div {
+            width: 800px;
+            margin: auto;
+        }
 
-    function now_exchange() {
-        $.ajax({
-            type: "GET",
-            url: "https://api.manana.kr/exchange/rate.json",
-            data: {},
-            success: function (response) {
-                // console.log(response);
-                let value = response[1]['rate'];
-                // console.log(value);
-                $('#exchange').text(value)
+        .order {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 50px;
+        }
+
+        .bg-small {
+            width: 800px;
+            height: 500px;
+            background: url('static/IMG_2028.JPG');
+            background-size: 800px 500px;
+            margin: 20px auto;
+        }
+
+        .ramen {
+            font-size: 50px;
+            margin: auto;
+        }
+
+        .head {
+            margin-right: 0px;
+        }
+    </style>
+   
+    <!-- flask  -->
+    <script type="text/javascript">
+        function make_review() {
+            // 1. 제목, 저자, 리뷰 내용을 가져옵니다.
+            let name = $('#name').val();
+            let quantity = $('#quantity').val();
+            let address = $('#address').val();
+            let telephone = $('#telephone').val();
+
+            // 2. 제목, 저자, 리뷰 중 하나라도 입력하지 않았을 경우 alert를 띄웁니다.
+            if (name == '') {
+                alert('제목을 입력해주세요');
+                $('#name').focus();
+                return;
+            } else if (quantity == '') {
+                alert('저자를 입력해주세요');
+                $('#quantity').focus();
+                return;
+            } else if (address == '') {
+                alert('리뷰를 입력해주세요');
+                $('#address').focus();
+                return;
+            } else if (telephone == '') {
+                alert('저자를 입력해주세요');
+                $('#telephone').focus();
+                return;
+
+                // 3. POST /reviews 에 저장을 요청합니다.
+                $.ajax({
+                    type: "POST",
+                    url: "/reviews",
+                    data: { name_give: name, quantity_give: quantity, address_give: address, telephone_give: telephone },
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            alert(response['msg']);
+                            window.location.reload();
+                        }
+                    }
+                })
             }
-        });
-    }
+            function listing() {
+                // 1. 리뷰 목록을 서버에 요청하기
+                $.ajax({
+                    type: "GET",
+                    url: "/reviews",
+                    data: {},
+                    success: function (response) {
+                        // 2. 요청 성공 여부 확인하기
+                        if (response['result'] == 'success') {
+                            let reviews = response['reviews'];
+                            // 3. 요청 성공했을 때 리뷰를 올바르게 화면에 나타내기
+                            for (let i = 0; i < reviews.length; i++) {
+                                make_card(reviews[i]['title'], reviews[i]['author'], reviews[i]['review']);
+                            }
+                        } else {
+                            alert('리뷰를 받아오지 못했습니다');
+                        }
+                    }
+                })
+            }
 
-</script>
+
+            function make_card(name, quantity, address, telephone) {
+                let temp_html = `<tr>
+                        <td>${name}</td>
+                        <td>${quantity}</td>
+                        <td>${address}</td>
+                        <td>${telephone}</td>
+                    </tr>`;
+                $('#orders-box').append(temp_html);
+            }
+    </script>
+</head>
 
 <body>
-    <div class="wrap">
-        <div id="image">
-            <img src="https://cdn.pixabay.com/photo/2013/07/12/18/20/chucks-153310_1280.png" alt="">
+    <div>
+        <div class='bg-small'>
         </div>
 
-        <hr>
+        <span>
+            <b class="ramen">라면을 드세요</b> 가격: 9,000원 개
+        </span>
         <div>
-            <span class="title">운동화</span> <span>가격 15,000원 / 개</span>
-            <div>
-                <p>세상에서 제일 멋진 신발입니다. </p>
-                <p> 이 신발만 있다면 하루종일 걸어도 발에 피로를 느낄 수 없으실 겁니다.</p>
-            </div>
-            <div class = "color_exchange">
-                달러-원 환율 :
-                <span id="exchange"></span>
-            </div>
+            멘지는 건강한 한그릇을 위해
+            인공조미료, 간수등을 사용하지 않고
+            매일 정성껏 직접 만들고 있습니다.
         </div>
-
-
-        <hr>
         <div>
-            <p>
-                <span class="title">주문하기!</span>
-            </p>
-
-            <p class="order_menu">
-                주문자 성함 : <input id="myName" class="order_box" type="text">
-            </p>
-
-            <p>
-                <label for="cnt">수량 : </label>
-                <select class="order_box name" id="myCnt">
-                    <option value="">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+            <h1 class="order">
+                <b>정보를 입력하세요</b>
+            </h1>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">주문자 성함:</span>
+                </div>
+                <input type="text" class="form-control" placeholder="이름을 입력하세요!" aria-label="Username"
+                    aria-describedby="basic-addon1" id="name">
+            </div>
+            <div class="form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">수량:</span>
+                </div>
+                <select class="form-control no2" id="exampleFormControlSelect1" id="quantity">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
                 </select>
-            </p>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">주소:</span>
+                </div>
+                <input type="text" class="form-control" placeholder="서울시 종로구..." aria-label="Username"
+                    aria-describedby="basic-addon1" id="address">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">전화번호:</span>
+                </div>
+                <input type="text" class="form-control" placeholder="010-xxxx-xxxx" aria-label="Username"
+                    aria-describedby="basic-addon1" id="telephone">
+            </div>
+            <div class="input-group mb-3">
 
-            <p class="order_menu">
-                주소 : <input id="myAdress" class="order_box" type="text">
-            </p>
 
-            <p class="order_menu">
-                전화번호 : <input id="myPhone" class="order_box" type="text">
-            </p>
-            <hr>
-
-            <div class="btn">
-                <button onclick="order()">주문하기</button>
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary" onclick="make_review();">주문하기</button>
             </div>
         </div>
-
-    </div>
+        <div class="orders">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="meta_info" scope="col">제목</th>
+                        <th class="meta_info" scope="col">저자</th>
+                        <th scope="col">리뷰</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-box">
+                    <tr>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 </body>
 
 </html>
